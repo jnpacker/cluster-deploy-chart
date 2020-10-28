@@ -3,7 +3,7 @@ apiVersion: hive.openshift.io/v1
 kind: ClusterDeployment
 metadata:
   name: {{ .Values.clusterName }}
-  namespace: TMP_NAME-aws
+  namespace: {{ .Values.clusterName }}
   labels:
     cloud: 'AWS'
     region: {{ .Values.region | quote }}
@@ -17,7 +17,7 @@ spec:
     platform:
       aws:
         credentialsSecretRef:
-          name: aws-aws-creds
+          name: aws-creds
       region: {{ .Values.basedomain | quote }}
     provisioning:
       installConfigSecretRef:
