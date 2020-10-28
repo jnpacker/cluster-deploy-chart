@@ -6,9 +6,9 @@ metadata:
     cloud: Amazon
     name: {{ .Values.clusterName }}
     vendor: OpenShift
-    {{- range .Values.extraLabels }}
-    - {{ . }}
+    {{- range $key, $val := .Values.extraLabels }}
+    {{ $key }}: {{ $val }}
     {{- end }}
-  name: {{ .Values.clusterName | quote }}
+  name: {{ .Values.clusterName }}
 spec:
   hubAcceptsClient: true

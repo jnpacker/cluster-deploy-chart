@@ -10,6 +10,6 @@ spec:
   forceUpgrade: false
   chart:
     git: https://github.com/jnpacker/cluster-deploy-chart
-    path: aws
+    path: aws/default-cluster-chart
   values:
     clusterName: jnp-test-aws

@@ -2,17 +2,25 @@
 apiVersion: agent.open-cluster-management.io/v1
 kind: KlusterletAddonConfig
 metadata:
-  name: TMP_NAME-aws
-  namespace: TMP_NAME-aws
+  name: {{ .Values.clusterName }}
+  namespace: {{ .Values.clusterName }}
 spec:
-  clusterName: TMP_NAME-aws
-  clusterNamespace: TMP_NAME-aws
+  clusterName: {{ .Values.clusterName }}
+  clusterNamespace: {{ .Values.clusterName }}
   clusterLabels:
     cloud: Amazon
     vendor: OpenShift
-    {{- range .Values.extraLabels }}
-    - {{ . }}
+    {{- range $key, $val := .Values.extraLabels }}
+    {{ $key }}: {{ $val }}
     {{- end }}
-  {{- range .Values.addOns }}
-  - {{ . }}
-  {{- end }}
+  applicationManager:
+    enabled: {{ .Values.addOns.applicationManager.enabled }}
+  policyController:
+    enabled: {{ .Values.addOns.policyController.enabled }}
+  searchCollector:
+    enabled: {{ .Values.addOns.searchCollector.enabled }}
+  certPolicyController:
+    enabled: {{ .Values.addOns.certPolicyController.enabled }}
+  iamPolicyController:
+    enabled: {{ .Values.addOns.iamPolicyController.enabled }}
+  version: {{ .Values.addOns.version }}

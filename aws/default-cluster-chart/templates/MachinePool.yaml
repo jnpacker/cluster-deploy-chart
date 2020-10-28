@@ -11,8 +11,8 @@ spec:
   platform:
     aws:
       rootVolume:
-        iops: {{ .Values.aws.rootVolume.iops }}
-        size: {{ .Values.aws.rootVolume.size }}
-        type: {{ .Values.aws.rootVolume.type }}
-      type: {{ .Values.aws.type }}
-  replicas: {{ .Values.aws.replicas }}
+        iops: {{ .Values.worker.rootVolume.iops }}
+        size: {{ .Values.worker.rootVolume.size }}
+        type: {{ .Values.worker.rootVolume.type }}
+      type: {{ .Values.worker.type }}
+  replicas: {{ .Values.worker.replicas }}

@@ -9,7 +9,7 @@ metadata:
     region: {{ .Values.region | quote }}
     vendor: 'OpenShift'
 spec:
-    baseDomain: {{ .Values.basedomain | quote }}
+    baseDomain: {{ .Values.baseDomain | quote }}
     clusterName: {{ .Values.clusterName }}
     controlPlaneConfig:
       servingCertificates: {}
@@ -18,7 +18,7 @@ spec:
       aws:
         credentialsSecretRef:
           name: aws-creds
-      region: {{ .Values.basedomain | quote }}
+        region: {{ .Values.region | quote }}
     provisioning:
       installConfigSecretRef:
         name: aws-install-config
@@ -26,5 +26,5 @@ spec:
         name: aws-ssh-private-key
       imageSetRef:
         name: {{ .Values.imageVersion | quote }}
-      pullSecretRef:
-        name: aws-pull-secret
+    pullSecretRef:
+      name: aws-pull-secret
