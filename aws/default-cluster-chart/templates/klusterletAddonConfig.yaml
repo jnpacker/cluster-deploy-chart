@@ -1,0 +1,18 @@
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: TMP_NAME-aws
+  namespace: TMP_NAME-aws
+spec:
+  clusterName: TMP_NAME-aws
+  clusterNamespace: TMP_NAME-aws
+  clusterLabels:
+    cloud: Amazon
+    vendor: OpenShift
+    {{- range .Values.extraLabels }}
+    - {{ . }}
+    {{- end }}
+  {{- range .Values.addOns }}
+  - {{ . }}
+  {{- end }}

@@ -1,0 +1,15 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: HelmRelease
+metadata:
+  name: jnp-test-aws
+spec:
+  releaseName: jnp-test-aws
+  targetNamespace: jnp-test-aws
+  resetValues: false
+  wait: false
+  forceUpgrade: false
+  chart:
+    git: https://github.com/jnpacker/cluster-deploy-chart
+    path: aws
+  values:
+    clusterName: jnp-test-aws

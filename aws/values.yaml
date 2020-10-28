@@ -1,0 +1,26 @@
+clusterName: jnp-test-aws
+baseDomain: dev06.red-chesterfield.com
+region: us-east-1
+imageVersion: img4.6.1-x86-64
+extraLabels: []
+
+aws:
+  rootVolume:
+    iops: 100
+    size: 100
+    type: gp2
+  type: m5.2xlarge
+  replicas: 3
+
+addOns:
+  applicationManager:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  iamPolicyController:
+    enabled: true
+  version: 2.1.0
