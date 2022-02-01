@@ -14,6 +14,10 @@ imageVersion: img4.6.1-x86-64
 extraLabels:
   usage: development
 
+cloudProvider:
+  secretRef:
+    name:
+
 # Worker node details
 worker:
   rootVolume:

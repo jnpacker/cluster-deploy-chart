@@ -17,14 +17,14 @@ spec:
     platform:
       aws:
         credentialsSecretRef:
-          name: aws-creds
+          name: {{ .Values.cloudProvider.secretRef.name }}
         region: {{ .Values.region | quote }}
     provisioning:
       installConfigSecretRef:
         name: aws-install-config
       sshPrivateKeySecretRef:
-        name: aws-ssh-private-key
+        name: {{ .Values.cloudProvider.secretRef.name }}
       imageSetRef:
         name: {{ .Values.imageVersion | quote }}
     pullSecretRef:
-      name: aws-pull-secret
+      name: {{ .Values.cloudProvider.secretRef.name }}
