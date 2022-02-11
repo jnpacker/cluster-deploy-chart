@@ -1,0 +1,57 @@
+#clusterName name to use
+clusterName: sample03
+
+#namespace where the HypershiftDeployment will be created (default=clusters)
+namespace: clusters
+
+issuerUrl: "https://"
+
+hostedCluster:
+  #controllerAvailabilityPolicy determine how many replicas are used to enable high availability
+  controllerAvailabilityPolicy: SingleReplica
+
+networking:
+  privateZoneID: ""
+  publicZoneID: ""
+  machineCIDR: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  podCIDR: 10.132.0.0/14
+  serviceCIDR: 172.31.0.0/16
+  subnetID: ""
+  vpcID: ""
+  zone: ""
+  # Cluster basedomain defined in Route 53 
+  baseDomain:
+
+cloudProviderSecretRef:
+
+#infraID that was used to tag the provider infrastructure resources
+infraID:
+
+iam:
+  #securityGroups:
+  #- sg-IDENTIFIER
+  endpointAccess: Public
+  roles:
+  - arn: ""
+    name: ""
+    namespace: ""
+
+#ocpRelease is the OpenShift Container Platform version to be used
+imageVersion: quay.io/openshift-release-dev/ocp-release:4.9.15-x86_64
+  
+
+etcd:
+  #size of the etcd physical volume (default=4Gi)
+  size: 4Gi
+
+#fips enablement
+fips: false
+
+# AWS region
+region: us-west-1
+
+infrastructure:
+  configure: true
+  #override: INFRA-ONLY
+

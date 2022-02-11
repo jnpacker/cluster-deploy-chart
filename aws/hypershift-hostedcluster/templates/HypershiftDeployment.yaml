@@ -1,0 +1,112 @@
+apiVersion: cluster.open-cluster-management.io/v1alpha1
+kind: HypershiftDeployment
+metadata:
+  name: {{ .Values.clusterName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  hostedClusterSpec:
+    autoscaling: {}
+    controllerAvailabilityPolicy: {{ .Values.hostedCluster.controllerAvailabilityPolicy }}
+    dns:
+      baseDomain: {{ .Values.networking.baseDomain }}
+      privateZoneID: {{ .Values.networking.privateZoneID }}
+      publicZoneID: {{ .Values.networking.publicZoneID }}
+    etcd:
+      managed:
+        storage:
+          persistentVolume:
+            size: {{ .Values.etcd.size }}
+          type: PersistentVolume
+      managementType: Managed
+    fips: {{ .Values.fips }}
+    {{ $uniqueID := randAlphaNum 5 }}
+    infraID: {{ .Values.clusterName }}-{{ lower $uniqueID }}
+    issuerURL: {{ default "https://" .Values.issuerUrl }}
+    networking:
+      machineCIDR: {{ .Values.networking.machineCIDR }}
+      networkType: {{ .Values.networking.networkType }}
+      podCIDR: {{ .Values.networking.podCIDR }}
+      serviceCIDR: {{ .Values.networking.serviceCIDR }}
+    platform:
+      aws:
+        cloudProviderConfig:
+          {{ if .Values.networking.vpcID }}
+          subnet:
+            id: {{ .Values.networking.subnetID }}
+          vpc: {{ .Values.networking.vpcID }}
+          zone: {{ .Values.networking.zone }}
+          {{ end }}
+        controlPlaneOperatorCreds:
+          name: {{ .Values.clusterName }}-cpo-creds
+        endpointAccess: {{ .Values.networking.endpointAccess }}
+        kubeCloudControllerCreds:
+          name: {{ .Values.clusterName }}-cloud-ctrl-creds
+        nodePoolManagementCreds:
+          name: {{ .Values.clusterName }}-node-mgmt-creds
+        region: {{ .Values.region }}
+        roles:
+{{ toYaml .Values.iam.roles | indent 8 }}
+      type: AWS
+    pullSecret:
+      name: {{ .Values.clusterName }}-pull-secret
+    release:
+      image: {{ .Values.ocpRelease }}
+    services:
+    - service: APIServer
+      servicePublishingStrategy:
+        type: LoadBalancer
+    - service: OAuthServer
+      servicePublishingStrategy:
+        type: Route
+    - service: OIDC
+      servicePublishingStrategy:
+        type: S3
+    - service: Konnectivity
+      servicePublishingStrategy:
+        type: Route
+    - service: Ignition
+      servicePublishingStrategy:
+        type: Route
+    sshKey: {}
+  infra-id: {{ .Values.clusterName }}-{{ lower $uniqueID }}
+  infrastructure:
+    cloudProvider:
+      name: {{ .Values.cloudProviderSecretRef }}
+    configure: {{ .Values.infrastructure.configure }}
+    {{ if .Values.infrastructure.override }}
+    override: {{ .Values.infrastructure.override }}
+    {{ end }}
+    platform:
+      aws:
+        region: {{ .Values.region}}
+  nodePools:
+  - name: {{ .Values.clusterName }}
+    spec:
+      clusterName: {{ .Values.clusterName }}
+      management:
+        autoRepair: false
+        replace:
+          rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 0
+          strategy: RollingUpdate
+        upgradeType: Replace
+      nodeCount: 2
+      platform:
+        aws:
+          instanceProfile: {{ .Values.clusterName }}-{{ lower $uniqueID }}-worker
+          instanceType: t3.large
+          rootVolume:
+            size: 35
+            type: gp3
+          securityGroups:
+          {{ if .Values.iam.securityGroups }}
+{{ toYaml .Values.iam.securityGroups | indent 10 }}
+          {{ end }}
+          subnet:
+          {{ if .Values.networking.subnetID }}
+            id: {{ .Values.networking.subnetID }}
+          {{ end }}
+        type: AWS
+      release:
+        image: {{ .Values.ocpRelease }}
