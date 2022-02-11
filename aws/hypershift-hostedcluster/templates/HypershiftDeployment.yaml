@@ -50,7 +50,7 @@ spec:
     pullSecret:
       name: {{ .Values.clusterName }}-pull-secret
     release:
-      image: {{ .Values.ocpRelease }}
+      image: {{ .Values.imageVersion }}
     services:
     - service: APIServer
       servicePublishingStrategy:
@@ -109,4 +109,4 @@ spec:
           {{ end }}
         type: AWS
       release:
-        image: {{ .Values.ocpRelease }}
+        image: {{ .Values.imageVersion }}
